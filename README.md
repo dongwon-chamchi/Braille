@@ -12,3 +12,5 @@
 * [박철현](https://github.com/1912-git)
 	* 영상 제작 및 편집
   
+* [강대혁](https://github.com/kangdeahyeok)
+	* 보고서 작성 및 3D 프린팅 보조
