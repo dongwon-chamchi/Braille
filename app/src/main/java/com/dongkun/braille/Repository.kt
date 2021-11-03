@@ -132,7 +132,7 @@ class Repository {
                             // It only searches for devices with the prefix "RNM" in the Bluetooth device name.
                             if (device_name != null && device_name.length > 4) {
                                 // 권동원 211030
-                                if (device_name == "Braille") {
+                                if (device_name.substring(0, 5) == "HC-06") {
                                     // filter your targetDevice and use connectToTargetedDevice()
                                     targetDevice = device
                                     foundDevice = true
