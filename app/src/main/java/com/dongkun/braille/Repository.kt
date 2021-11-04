@@ -229,7 +229,7 @@ class Repository {
         }.run()
     }
 
-    fun toArduino(first: Int, second: Int, pos: Int) {
+    fun toArduino(first: Int, second: Int) {
         var ch = '\u2800'       // 점자 베이스
         val firstBinary = String.format(
             "%03d", Integer.parseInt(Integer.toBinaryString(first))
@@ -251,7 +251,7 @@ class Repository {
             try {
                 mOutputStream?.write(first + 48) // 프로토콜 전송
                 mOutputStream?.write(second + 48) // 프로토콜 전송
-                mOutputStream?.write(pos + 48) // 프로토콜 전송
+//                mOutputStream?.write(pos + 48) // 프로토콜 전송
                 println(recv)
 
             } catch (e: Exception) {
