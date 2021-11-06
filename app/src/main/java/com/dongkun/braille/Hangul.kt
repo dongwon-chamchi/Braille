@@ -2,7 +2,7 @@ package com.dongkun.braille
 
 import android.os.Handler
 
-class Hangul(private val repository: Repository) {
+class Hangul {
     val cho = arrayOf(
         "ㄱ",
         "ㄲ",
@@ -81,102 +81,102 @@ class Hangul(private val repository: Repository) {
     )
 
     fun checkJOONG(joong: Int) {
-        var joong2 = Hangul(repository).joong[joong]
+        val joong2 = Hangul().joong[joong]
         when (joong2) {
             "ㅏ" -> {
-                repository.toArduino(6, 1)
+                Repository().toArduino(6, 1)
 
             }
             "ㅐ" -> {
-                repository.toArduino(7, 2)
+                Repository().toArduino(7, 2)
 
             }
             "ㅑ" -> {
-                repository.toArduino(1, 6)
+                Repository().toArduino(1, 6)
 
             }
             "ㅒ" -> {
-                repository.toArduino(1, 6)
+                Repository().toArduino(1, 6)
                 Handler().postDelayed({
-                    repository.toArduino(7, 2)
+                    Repository().toArduino(7, 2)
                 }, 1000L)
 
             }
             "ㅓ" -> {
-                repository.toArduino(3, 4)
+                Repository().toArduino(3, 4)
 
             }
             "ㅔ" -> {
-                repository.toArduino(5, 6)
+                Repository().toArduino(5, 6)
 
             }
             "ㅕ" -> {
-                repository.toArduino(4, 3)
+                Repository().toArduino(4, 3)
 
             }
             "ㅖ" -> {
-                repository.toArduino(1, 4)
+                Repository().toArduino(1, 4)
 
             }
             "ㅗ" -> {
-                repository.toArduino(5, 1)
+                Repository().toArduino(5, 1)
 
             }
             "ㅘ" -> {
-                repository.toArduino(7, 1)
+                Repository().toArduino(7, 1)
 
             }
             "ㅙ" -> {
-                repository.toArduino(7, 1)
+                Repository().toArduino(7, 1)
                 Handler().postDelayed({
-                    repository.toArduino(7, 2)
+                    Repository().toArduino(7, 2)
                 }, 1000L)
 
             }
             "ㅚ" -> {
-                repository.toArduino(5, 7)
+                Repository().toArduino(5, 7)
 
             }
             "ㅛ" -> {
-                repository.toArduino(1, 5)
+                Repository().toArduino(1, 5)
 
             }
             "ㅜ" -> {
-                repository.toArduino(5, 4)
+                Repository().toArduino(5, 4)
 
             }
             "ㅝ" -> {
-                repository.toArduino(7, 4)
+                Repository().toArduino(7, 4)
 
             }
             "ㅞ" -> {
-                repository.toArduino(7, 4)
+                Repository().toArduino(7, 4)
                 Handler().postDelayed({
-                    repository.toArduino(7, 2)
+                    Repository().toArduino(7, 2)
                 }, 1000L)
 
             }
             "ㅟ" -> {
-                repository.toArduino(5, 4)
+                Repository().toArduino(5, 4)
                 Handler().postDelayed({
-                    repository.toArduino(7, 2)
+                    Repository().toArduino(7, 2)
                 }, 1000L)
 
             }
             "ㅠ" -> {
-                repository.toArduino(4, 5)
+                Repository().toArduino(4, 5)
 
             }
             "ㅡ" -> {
-                repository.toArduino(2, 5)
+                Repository().toArduino(2, 5)
 
             }
             "ㅢ" -> {
-                repository.toArduino(2, 7)
+                Repository().toArduino(2, 7)
 
             }
             "ㅣ" -> {
-                repository.toArduino(5, 2)
+                Repository().toArduino(5, 2)
 
             }
             else -> {
@@ -187,158 +187,158 @@ class Hangul(private val repository: Repository) {
     }
 
     fun checkJONG(jong: Int) {
-        var jong2 = Hangul(repository).jong[jong]
+        val jong2 = Hangul().jong[jong]
         when (jong2) {
             "" -> {
                 // 종성이 없으면 아무것도 안보냄..?
-//                repository.toArduino(0, 0, 3)
+//                Repository().toArduino(0, 0, 3)
 
             }
             "ㄱ" -> {
-                repository.toArduino(4, 0)
+                Repository().toArduino(4, 0)
 
             }
             "ㄲ" -> {
-                repository.toArduino(4, 0)
+                Repository().toArduino(4, 0)
                 Handler().postDelayed({
-                    repository.toArduino(4, 0)
+                    Repository().toArduino(4, 0)
                 }, 1000L)
 
             }
             "ㄳ" -> {
-                repository.toArduino(4, 0)
+                Repository().toArduino(4, 0)
                 Handler().postDelayed({
-                    repository.toArduino(1, 0)
+                    Repository().toArduino(1, 0)
                 }, 1000L)
 
             }
             "ㄴ" -> {
-                repository.toArduino(2, 2)
+                Repository().toArduino(2, 2)
 
             }
             "ㄵ" -> {
-                repository.toArduino(2, 2)
+                Repository().toArduino(2, 2)
                 Handler().postDelayed({
-                    repository.toArduino(5, 0)
+                    Repository().toArduino(5, 0)
                 }, 1000L)
 
             }
             "ㄶ" -> {
-                repository.toArduino(2, 2)
+                Repository().toArduino(2, 2)
                 Handler().postDelayed({
-                    repository.toArduino(1, 3)
+                    Repository().toArduino(1, 3)
                 }, 1000L)
 
             }
             "ㄷ" -> {
-                repository.toArduino(1, 2)
+                Repository().toArduino(1, 2)
 
             }
             "ㄹ" -> {
-                repository.toArduino(2, 0)
+                Repository().toArduino(2, 0)
 
             }
             "ㄺ" -> {
-                repository.toArduino(2, 0)
+                Repository().toArduino(2, 0)
                 Handler().postDelayed({
-                    repository.toArduino(4, 0)
+                    Repository().toArduino(4, 0)
                 }, 1000L)
 
             }
             "ㄻ" -> {
-                repository.toArduino(2, 0)
+                Repository().toArduino(2, 0)
                 Handler().postDelayed({
-                    repository.toArduino(2, 1)
+                    Repository().toArduino(2, 1)
                 }, 1000L)
 
             }
             "ㄼ" -> {
-                repository.toArduino(2, 0)
+                Repository().toArduino(2, 0)
                 Handler().postDelayed({
-                    repository.toArduino(6, 0)
+                    Repository().toArduino(6, 0)
                 }, 1000L)
 
             }
             "ㄽ" -> {
-                repository.toArduino(2, 0)
+                Repository().toArduino(2, 0)
                 Handler().postDelayed({
-                    repository.toArduino(1, 0)
+                    Repository().toArduino(1, 0)
                 }, 1000L)
 
             }
             "ㄾ" -> {
-                repository.toArduino(2, 0)
+                Repository().toArduino(2, 0)
                 Handler().postDelayed({
-                    repository.toArduino(3, 1)
+                    Repository().toArduino(3, 1)
                 }, 1000L)
 
             }
             "ㄿ" -> {
-                repository.toArduino(2, 0)
+                Repository().toArduino(2, 0)
                 Handler().postDelayed({
-                    repository.toArduino(2, 3)
+                    Repository().toArduino(2, 3)
                 }, 1000L)
 
             }
             "ㅀ" -> {
-                repository.toArduino(2, 0)
+                Repository().toArduino(2, 0)
                 Handler().postDelayed({
-                    repository.toArduino(1, 3)
+                    Repository().toArduino(1, 3)
                 }, 1000L)
 
             }
             "ㅁ" -> {
-                repository.toArduino(2, 1)
+                Repository().toArduino(2, 1)
 
             }
             "ㅂ" -> {
-                repository.toArduino(6, 0)
+                Repository().toArduino(6, 0)
 
             }
             "ㅄ" -> {
-                repository.toArduino(6, 0)
+                Repository().toArduino(6, 0)
                 Handler().postDelayed({
-                    repository.toArduino(1, 0)
+                    Repository().toArduino(1, 0)
                 }, 1000L)
 
             }
             "ㅅ" -> {
-                repository.toArduino(1, 0)
+                Repository().toArduino(1, 0)
 
             }
             "ㅆ" -> {
-                repository.toArduino(
+                Repository().toArduino(
                     Integer.parseInt("001", 2),
                     Integer.parseInt("100", 2)
                 )
 
             }
             "ㅇ" -> {
-                repository.toArduino(3, 3)
+                Repository().toArduino(3, 3)
 
             }
             "ㅈ" -> {
-                repository.toArduino(5, 0)
+                Repository().toArduino(5, 0)
 
             }
             "ㅊ" -> {
-                repository.toArduino(3, 0)
+                Repository().toArduino(3, 0)
 
             }
             "ㅋ" -> {
-                repository.toArduino(3, 2)
+                Repository().toArduino(3, 2)
 
             }
             "ㅌ" -> {
-                repository.toArduino(3, 1)
+                Repository().toArduino(3, 1)
 
             }
             "ㅍ" -> {
-                repository.toArduino(2, 3)
+                Repository().toArduino(2, 3)
 
             }
             "ㅎ" -> {
-                repository.toArduino(1, 3)
+                Repository().toArduino(1, 3)
 
             }
             else -> {
@@ -349,7 +349,7 @@ class Hangul(private val repository: Repository) {
     }
 
     fun eok() {
-        repository.toArduino(
+        Repository().toArduino(
             Integer.parseInt("100", 2),
             Integer.parseInt("111", 2)
         )
@@ -357,7 +357,7 @@ class Hangul(private val repository: Repository) {
     }
 
     fun eon() {
-        repository.toArduino(
+        Repository().toArduino(
             Integer.parseInt("011", 2),
             Integer.parseInt("111", 2)
         )
@@ -365,7 +365,7 @@ class Hangul(private val repository: Repository) {
     }
 
     fun eol() {
-        repository.toArduino(
+        Repository().toArduino(
             Integer.parseInt("011", 2),
             Integer.parseInt("110", 2)
         )
@@ -373,7 +373,7 @@ class Hangul(private val repository: Repository) {
     }
 
     fun yeon() {
-        repository.toArduino(
+        Repository().toArduino(
             Integer.parseInt("100", 2),
             Integer.parseInt("001", 2)
         )
@@ -381,7 +381,7 @@ class Hangul(private val repository: Repository) {
     }
 
     fun yeol() {
-        repository.toArduino(
+        Repository().toArduino(
             Integer.parseInt("110", 2),
             Integer.parseInt("011", 2)
         )
@@ -389,7 +389,7 @@ class Hangul(private val repository: Repository) {
     }
 
     fun yeong() {
-        repository.toArduino(
+        Repository().toArduino(
             Integer.parseInt("110", 2),
             Integer.parseInt("111", 2)
         )
@@ -397,7 +397,7 @@ class Hangul(private val repository: Repository) {
     }
 
     fun ok() {
-        repository.toArduino(
+        Repository().toArduino(
             Integer.parseInt("101", 2),
             Integer.parseInt("101", 2)
         )
@@ -405,7 +405,7 @@ class Hangul(private val repository: Repository) {
     }
 
     fun on() {
-        repository.toArduino(
+        Repository().toArduino(
             Integer.parseInt("111", 2),
             Integer.parseInt("011", 2)
         )
@@ -413,7 +413,7 @@ class Hangul(private val repository: Repository) {
     }
 
     fun ong() {
-        repository.toArduino(
+        Repository().toArduino(
             Integer.parseInt("111", 2),
             Integer.parseInt("111", 2)
         )
@@ -421,7 +421,7 @@ class Hangul(private val repository: Repository) {
     }
 
     fun un() {
-        repository.toArduino(
+        Repository().toArduino(
             Integer.parseInt("110", 2),
             Integer.parseInt("110", 2)
         )
@@ -429,7 +429,7 @@ class Hangul(private val repository: Repository) {
     }
 
     fun ul() {
-        repository.toArduino(
+        Repository().toArduino(
             Integer.parseInt("111", 2),
             Integer.parseInt("101", 2)
         )
@@ -437,7 +437,7 @@ class Hangul(private val repository: Repository) {
     }
 
     fun eun() {
-        repository.toArduino(
+        Repository().toArduino(
             Integer.parseInt("101", 2),
             Integer.parseInt("011", 2)
         )
@@ -445,67 +445,69 @@ class Hangul(private val repository: Repository) {
     }
 
     fun eul() {
-        repository.toArduino(
+        Repository().toArduino(
             Integer.parseInt("011", 2),
             Integer.parseInt("101", 2)
         )
 
     }
 
-    fun _in() {
-        repository.toArduino(
+    fun in_() {
+        Repository().toArduino(
             Integer.parseInt("111", 2),
             Integer.parseInt("110", 2)
         )
 
     }
 
-    fun yageo(joong2: String, jong2: String, joong: Int, jong: Int) {
+    fun yageo(joong: Int, jong: Int) {
+        val joong2 = Hangul().joong[joong]
+        val jong2 = Hangul().jong[jong]
         if (joong2 == "ㅓ" && jong2 == "ㄱ") {
-            Hangul(repository).eok()
+            Hangul().eok()
 
         } else if (joong2 == "ㅓ" && jong2 == "ㄴ") {
-            Hangul(repository).eon()
+            Hangul().eon()
 
         } else if (joong2 == "ㅓ" && jong2 == "ㄹ") {
-            Hangul(repository).eol()
+            Hangul().eol()
 
         } else if (joong2 == "ㅕ" && jong2 == "ㄴ") {
-            Hangul(repository).yeon()
+            Hangul().yeon()
 
         } else if (joong2 == "ㅕ" && jong2 == "ㄹ") {
-            Hangul(repository).yeol()
+            Hangul().yeol()
 
         } else if (joong2 == "ㅕ" && jong2 == "ㅇ") {
-            Hangul(repository).yeong()
+            Hangul().yeong()
 
         } else if (joong2 == "ㅗ" && jong2 == "ㄱ") {
-            Hangul(repository).ok()
+            Hangul().ok()
 
         } else if (joong2 == "ㅗ" && jong2 == "ㄴ") {
-            Hangul(repository).on()
+            Hangul().on()
 
         } else if (joong2 == "ㅗ" && jong2 == "ㅇ") {
-            Hangul(repository).ong()
+            Hangul().ong()
 
         } else if (joong2 == "ㅜ" && jong2 == "ㄴ") {
-            Hangul(repository).un()
+            Hangul().un()
 
         } else if (joong2 == "ㅜ" && jong2 == "ㄹ") {
-            Hangul(repository).ul()
+            Hangul().ul()
 
         } else if (joong2 == "ㅡ" && jong2 == "ㄴ") {
-            Hangul(repository).eun()
+            Hangul().eun()
 
         } else if (joong2 == "ㅡ" && jong2 == "ㄹ") {
-            Hangul(repository).eul()
+            Hangul().eul()
 
         } else if (joong2 == "ㅣ" && jong2 == "ㄴ") {
-            Hangul(repository)._in()
+            Hangul().in_()
 
         } else {
-            Hangul(repository).checkJOONG(joong)
-            Hangul(repository).checkJONG(jong)
+            Hangul().checkJOONG(joong)
+            Hangul().checkJONG(jong)
         }
 
     }

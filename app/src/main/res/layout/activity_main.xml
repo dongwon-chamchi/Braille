@@ -30,16 +30,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_gravity="center"
-            android:layout_marginBottom="200dp">
+            android:layout_marginBottom="200dp"
+            android:orientation="horizontal">
+
             <EditText
-                android:layout_margin="10dp"
                 android:id="@+id/txt_send"
-                android:layout_gravity="center"
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:layout_weight="1" />
 
             <Button
                 android:id="@+id/btn_send"
@@ -59,7 +60,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="100dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="@{viewModel.isDebug()?View.VISIBLE:View.GONE}">
 
             <Button
                 android:id="@+id/button"
@@ -89,27 +91,29 @@
         </ScrollView>
 
         <LinearLayout
-            android:layout_marginTop="10dp"
-            android:padding="10dp"
-            android:layout_gravity="center"
-            android:background="@drawable/round_background_black_trans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/round_background_black_trans"
             android:orientation="horizontal"
+            android:padding="10dp"
             android:visibility="@{viewModel.inProgressView?View.VISIBLE:View.GONE}">
+
             <ProgressBar
-                android:layout_marginStart="10dp"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:indeterminateTint="@color/white"/>
-            <TextView
-                android:textColor="@color/white"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_gravity="center"
+                android:indeterminateTint="@color/white" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{viewModel.txtProgress}"/>
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:text="@{viewModel.txtProgress}"
+                android:textColor="@color/white" />
         </LinearLayout>
     </FrameLayout>
 </layout>

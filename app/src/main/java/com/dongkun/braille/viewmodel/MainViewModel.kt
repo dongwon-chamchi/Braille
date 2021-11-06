@@ -7,7 +7,6 @@ import androidx.lifecycle.*
 import com.dongkun.braille.Hangul
 import com.dongkun.braille.Repository
 import com.dongkun.braille.util.*
-import java.nio.charset.Charset
 
 class MainViewModel(private val repository: Repository) : ViewModel() {
 
@@ -16,8 +15,9 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     val progressState: LiveData<String>
         get() = repository.progressState
     var btnConnected = ObservableBoolean(false)
-
     var inProgressView = ObservableBoolean(false)
+
+    var isDebug = ObservableBoolean(false)
     var txtProgress: ObservableField<String> = ObservableField("")
 
     private val _requestBleOn = MutableLiveData<Event<Boolean>>()
@@ -65,230 +65,323 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
 
     fun onClickSendData(sendTxt: String) {
         // 권동원 211101
-        when {
-            sendTxt[0].toString() == "것" -> {
-                repository.toArduino(Integer.parseInt("000", 2), Integer.parseInt("111", 2))
-                repository.toArduino(Integer.parseInt("011", 2), Integer.parseInt("100", 2))
+        for (i in sendTxt.indices) {
+            when {
+                sendTxt[i].toString() == "것" -> {
+                    repository.toArduino(Integer.parseInt("000", 2), Integer.parseInt("111", 2))
+                    repository.toArduino(Integer.parseInt("011", 2), Integer.parseInt("100", 2))
 
-            }
-            else -> {
+                }
+                else -> {
 
-                var cho = ((sendTxt[0] - '\uAC00') / 28) / 21   // 초성
-                var joong = (sendTxt[0] - '\uAC00') / 28 % 21   // 중성
-                var jong = (sendTxt[0] - '\uAC00') % 28         // 종성
-                var cho2 = Hangul(repository).cho[cho]
-                var joong2 = Hangul(repository).joong[joong]
-                var jong2 = Hangul(repository).jong[jong]
-                when (cho2) {
-                    "ㄱ" -> {
-                        if (joong2 == "ㅏ") {
-                            repository.toArduino(
-                                Integer.parseInt("110", 2),
-                                Integer.parseInt("101", 2)
-                            )
-                            Hangul(repository).checkJONG(jong)
+                    if (sendTxt[i].toString() >= "가" && sendTxt[i].toString() <= "힣") {
+                        val cho = ((sendTxt[i] - '\uAC00') / 28) / 21   // 초성
+                        val joong = (sendTxt[i] - '\uAC00') / 28 % 21   // 중성
+                        val jong = (sendTxt[i] - '\uAC00') % 28         // 종성
+                        val cho2 = Hangul().cho[cho]
+                        val joong2 = Hangul().joong[joong]
+                        val jong2 = Hangul().jong[jong]
+                        when (cho2) {
+                            "ㄱ" -> {
+                                if (joong2 == "ㅏ") {
+                                    repository.toArduino(
+                                        Integer.parseInt("110", 2),
+                                        Integer.parseInt("101", 2)
+                                    )
+                                    Hangul().checkJONG(jong)
 
-                        } else {
-                            repository.toArduino(0, 4)
-                            Hangul(repository).yageo(joong2, jong2, joong, jong)
+                                } else {
+                                    repository.toArduino(0, 4)
+                                    Hangul().yageo(joong, jong)
 
-                        }
+                                }
 
-                    }
-                    "ㄲ" -> {
-                        repository.toArduino(0, 1)
-                        if (joong2 == "ㅏ") {
-                            repository.toArduino(
-                                Integer.parseInt("110", 2),
-                                Integer.parseInt("101", 2)
-                            )
-                            Hangul(repository).checkJONG(jong)
+                            }
+                            "ㄲ" -> {
+                                repository.toArduino(0, 1)
+                                if (joong2 == "ㅏ") {
+                                    repository.toArduino(
+                                        Integer.parseInt("110", 2),
+                                        Integer.parseInt("101", 2)
+                                    )
+                                    Hangul().checkJONG(jong)
 
-                        } else {
-                            repository.toArduino(0, 4)
-                            Hangul(repository).yageo(joong2, jong2, joong, jong)
+                                } else {
+                                    repository.toArduino(0, 4)
+                                    Hangul().yageo(joong, jong)
 
-                        }
+                                }
 
-                    }
-                    "ㄴ" -> {
-                        if (joong2 == "ㅏ") {
-                            repository.toArduino(
-                                Integer.parseInt("100", 2),
-                                Integer.parseInt("100", 2)
-                            )
-                            Hangul(repository).checkJONG(jong)
+                            }
+                            "ㄴ" -> {
+                                if (joong2 == "ㅏ") {
+                                    repository.toArduino(
+                                        Integer.parseInt("100", 2),
+                                        Integer.parseInt("100", 2)
+                                    )
+                                    Hangul().checkJONG(jong)
 
-                        } else {
-                            repository.toArduino(4, 4)
-                            Hangul(repository).yageo(joong2, jong2, joong, jong)
+                                } else {
+                                    repository.toArduino(4, 4)
+                                    Hangul().yageo(joong, jong)
 
-                        }
+                                }
 
-                    }
-                    "ㄷ" -> {
-                        if (joong2 == "ㅏ") {
-                            repository.toArduino(
-                                Integer.parseInt("010", 2),
-                                Integer.parseInt("100", 2)
-                            )
-                            Hangul(repository).checkJONG(jong)
+                            }
+                            "ㄷ" -> {
+                                if (joong2 == "ㅏ") {
+                                    repository.toArduino(
+                                        Integer.parseInt("010", 2),
+                                        Integer.parseInt("100", 2)
+                                    )
+                                    Hangul().checkJONG(jong)
 
-                        } else {
-                            repository.toArduino(2, 4)
-                            Hangul(repository).yageo(joong2, jong2, joong, jong)
+                                } else {
+                                    repository.toArduino(2, 4)
+                                    Hangul().yageo(joong, jong)
 
-                        }
+                                }
 
-                    }
-                    "ㄸ" -> {
-                        repository.toArduino(0, 1)
-                        if (joong2 == "ㅏ") {
-                            repository.toArduino(
-                                Integer.parseInt("010", 2),
-                                Integer.parseInt("100", 2)
-                            )
-                            Hangul(repository).checkJONG(jong)
+                            }
+                            "ㄸ" -> {
+                                repository.toArduino(0, 1)
+                                if (joong2 == "ㅏ") {
+                                    repository.toArduino(
+                                        Integer.parseInt("010", 2),
+                                        Integer.parseInt("100", 2)
+                                    )
+                                    Hangul().checkJONG(jong)
 
-                        } else {
-                            repository.toArduino(2, 4)
-                            Hangul(repository).yageo(joong2, jong2, joong, jong)
+                                } else {
+                                    repository.toArduino(2, 4)
+                                    Hangul().yageo(joong, jong)
 
-                        }
+                                }
 
-                    }
-                    "ㄹ" -> {
-                        // '라'는 약자가 없음
+                            }
+                            "ㄹ" -> {
+                                // '라'는 약자가 없음
 //                        if (joong2 == "ㅏ") {
 //                            repository.toArduino(
 //                                Integer.parseInt("010", 2),
 //                                Integer.parseInt("100", 2)
 //                            )
-//                            Hangul(repository).checkJONG(jong)
+//                            Hangul().checkJONG(jong)
 //
 //                        } else {
-                        repository.toArduino(0, 2)
-                        Hangul(repository).yageo(joong2, jong2, joong, jong)
+                                repository.toArduino(0, 2)
+                                Hangul().yageo(joong, jong)
 
 //                        }
 
-                    }
-                    "ㅁ" -> {
-                        if (joong2 == "ㅏ") {
-                            repository.toArduino(
-                                Integer.parseInt("100", 2),
-                                Integer.parseInt("010", 2)
-                            )
-                            Hangul(repository).checkJONG(jong)
+                            }
+                            "ㅁ" -> {
+                                if (joong2 == "ㅏ") {
+                                    repository.toArduino(
+                                        Integer.parseInt("100", 2),
+                                        Integer.parseInt("010", 2)
+                                    )
+                                    Hangul().checkJONG(jong)
 
-                        } else {
-                            repository.toArduino(4, 2)
-                            Hangul(repository).yageo(joong2, jong2, joong, jong)
+                                } else {
+                                    repository.toArduino(4, 2)
+                                    Hangul().yageo(joong, jong)
 
+                                }
+
+                            }
+                            "ㅂ" -> {
+                                if (joong2 == "ㅏ") {
+                                    repository.toArduino(
+                                        Integer.parseInt("000", 2),
+                                        Integer.parseInt("110", 2)
+                                    )
+                                    Hangul().checkJONG(jong)
+
+                                } else {
+                                    repository.toArduino(0, 6)
+                                    Hangul().yageo(joong, jong)
+
+                                }
+
+                            }
+                            "ㅃ" -> {
+                                repository.toArduino(0, 1)
+                                if (joong2 == "ㅏ") {
+                                    repository.toArduino(
+                                        Integer.parseInt("000", 2),
+                                        Integer.parseInt("110", 2)
+                                    )
+                                    Hangul().checkJONG(jong)
+
+                                } else {
+                                    repository.toArduino(0, 6)
+                                    Hangul().yageo(joong, jong)
+
+                                }
+                            }
+                            "ㅅ" -> {
+                                if (joong2 == "ㅏ") {
+                                    repository.toArduino(
+                                        Integer.parseInt("111", 2),
+                                        Integer.parseInt("000", 2)
+                                    )
+                                    Hangul().checkJONG(jong)
+
+                                } else {
+                                    repository.toArduino(0, 1)
+                                    Hangul().yageo(joong, jong)
+
+                                }
+
+                            }
+                            "ㅆ" -> {
+                                repository.toArduino(0, 1)
+                                if (joong2 == "ㅏ") {
+                                    repository.toArduino(
+                                        Integer.parseInt("111", 2),
+                                        Integer.parseInt("000", 2)
+                                    )
+                                    Hangul().checkJONG(jong)
+
+                                } else {
+                                    repository.toArduino(0, 1)
+                                    Hangul().yageo(joong, jong)
+
+                                }
+                            }
+                            "ㅇ" -> {
+                                // '아'는 약자가 없음
+//                            if (joong2 == "ㅏ") {
+//                                repository.toArduino(
+//                                    Integer.parseInt("111", 2),
+//                                    Integer.parseInt("000", 2)
+//                                )
+//                                Hangul().checkJONG(jong)
+//
+//                            } else {
+                                repository.toArduino(0, 0)
+                                Hangul().yageo(joong, jong)
+
+//                            }
+
+                            }
+                            "ㅈ" -> {
+                                if (joong2 == "ㅏ") {
+                                    repository.toArduino(
+                                        Integer.parseInt("000", 2),
+                                        Integer.parseInt("101", 2)
+                                    )
+                                    Hangul().checkJONG(jong)
+
+                                } else {
+                                    repository.toArduino(0, 5)
+                                    Hangul().yageo(joong, jong)
+
+                                }
+
+                            }
+                            "ㅉ" -> {
+                                repository.toArduino(0, 1)
+                                if (joong2 == "ㅏ") {
+                                    repository.toArduino(
+                                        Integer.parseInt("000", 2),
+                                        Integer.parseInt("101", 2)
+                                    )
+                                    Hangul().checkJONG(jong)
+
+                                } else {
+                                    repository.toArduino(0, 5)
+                                    Hangul().yageo(joong, jong)
+
+                                }
+
+                            }
+                            "ㅊ" -> {
+                                // '차'는 약자가 없음
+//                            if (joong2 == "ㅏ") {
+//                                repository.toArduino(
+//                                    Integer.parseInt("011", 2),
+//                                    Integer.parseInt("000", 2)
+//                                )
+//                                Hangul().checkJONG(jong)
+//
+//                            } else {
+                                repository.toArduino(0, 3)
+                                Hangul().yageo(joong, jong)
+
+//                            }
+
+                            }
+                            "ㅋ" -> {
+                                if (joong2 == "ㅏ") {
+                                    repository.toArduino(
+                                        Integer.parseInt("110", 2),
+                                        Integer.parseInt("100", 2)
+                                    )
+                                    Hangul().checkJONG(jong)
+
+                                } else {
+                                    repository.toArduino(6, 4)
+                                    Hangul().yageo(joong, jong)
+
+                                }
+
+                            }
+                            "ㅌ" -> {
+                                if (joong2 == "ㅏ") {
+                                    repository.toArduino(
+                                        Integer.parseInt("110", 2),
+                                        Integer.parseInt("010", 2)
+                                    )
+                                    Hangul().checkJONG(jong)
+
+                                } else {
+                                    repository.toArduino(6, 2)
+                                    Hangul().yageo(joong, jong)
+
+                                }
+
+                            }
+                            "ㅍ" -> {
+                                if (joong2 == "ㅏ") {
+                                    repository.toArduino(
+                                        Integer.parseInt("100", 2),
+                                        Integer.parseInt("110", 2)
+                                    )
+                                    Hangul().checkJONG(jong)
+
+                                } else {
+                                    repository.toArduino(4, 6)
+                                    Hangul().yageo(joong, jong)
+
+                                }
+
+                            }
+                            "ㅎ" -> {
+                                if (joong2 == "ㅏ") {
+                                    repository.toArduino(
+                                        Integer.parseInt("010", 2),
+                                        Integer.parseInt("110", 2)
+                                    )
+                                    Hangul().checkJONG(jong)
+
+                                } else {
+                                    repository.toArduino(2, 6)
+                                    Hangul().yageo(joong, jong)
+
+                                }
+
+                            }
+                            else -> {
+                                //                    toArduino(-1, -1)
+                            }
                         }
-
                     }
-                    "ㅂ" -> {
-                        if (joong2 == "ㅏ") {
-                            repository.toArduino(
-                                Integer.parseInt("000", 2),
-                                Integer.parseInt("110", 2)
-                            )
-                            Hangul(repository).checkJONG(jong)
 
-                        } else {
-                            repository.toArduino(0, 6)
-                            Hangul(repository).yageo(joong2, jong2, joong, jong)
-
-                        }
-
-                    }
-                    "ㅃ" -> {
-                        repository.toArduino(0, 1)
-                        if (joong2 == "ㅏ") {
-                            repository.toArduino(
-                                Integer.parseInt("000", 2),
-                                Integer.parseInt("110", 2)
-                            )
-                            Hangul(repository).checkJONG(jong)
-
-                        } else {
-                            repository.toArduino(0, 6)
-                            Hangul(repository).yageo(joong2, jong2, joong, jong)
-
-                        }
-                    }
-                    "ㅅ" -> {
-                        if (joong2 == "ㅏ") {
-                            repository.toArduino(
-                                Integer.parseInt("111", 2),
-                                Integer.parseInt("000", 2)
-                            )
-                            Hangul(repository).checkJONG(jong)
-
-                        } else {
-                            repository.toArduino(0, 1)
-                            Hangul(repository).yageo(joong2, jong2, joong, jong)
-
-                        }
-
-                    }
-                    "ㅆ" -> {
-                        repository.toArduino(0, 1)
-                        if (joong2 == "ㅏ") {
-                            repository.toArduino(
-                                Integer.parseInt("111", 2),
-                                Integer.parseInt("000", 2)
-                            )
-                            Hangul(repository).checkJONG(jong)
-
-                        } else {
-                            repository.toArduino(0, 1)
-                            Hangul(repository).yageo(joong2, jong2, joong, jong)
-
-                        }
-                    }
-                    "ㅇ" -> {
-                        repository.toArduino(0, 0)
-
-                    }
-                    "ㅈ" -> {
-                        repository.toArduino(0, 5)
-
-                    }
-                    "ㅉ" -> {
-                        repository.toArduino(0, 1)
-                        Handler().postDelayed({
-                            repository.toArduino(0, 5)
-                        }, 1000L)
-
-                    }
-                    "ㅊ" -> {
-                        repository.toArduino(0, 3)
-
-                    }
-                    "ㅋ" -> {
-                        repository.toArduino(6, 4)
-
-                    }
-                    "ㅌ" -> {
-                        repository.toArduino(6, 2)
-
-                    }
-                    "ㅍ" -> {
-                        repository.toArduino(4, 6)
-
-                    }
-                    "ㅎ" -> {
-                        repository.toArduino(2, 6)
-
-                    }
-                    else -> {
-                        //                    toArduino(-1, -1)
-                    }
                 }
-
             }
+
         }
 
 //        val byteArr = sendTxt.toByteArray(Charset.defaultCharset())

@@ -230,21 +230,18 @@ class Repository {
     }
 
     fun toArduino(first: Int, second: Int) {
-        var ch = '\u2800'       // 점자 베이스
+        val ch = '\u2800'       // 점자 베이스
         val firstBinary = String.format(
             "%03d", Integer.parseInt(Integer.toBinaryString(first))
         )
         val secondBinary = String.format(
             "%03d", Integer.parseInt(Integer.toBinaryString(second))
         )
+        val reversedBinary = (firstBinary + secondBinary + "00").reversed()
 
-        var recv = ch +
+        val recv = ch +
                 Integer.parseInt(
-                    Integer.toHexString(
-                        Integer.parseInt(
-                            (firstBinary + secondBinary + "00").reversed(), 2
-                        )
-                    ), 16
+                    Integer.toHexString(Integer.parseInt(reversedBinary, 2)), 16
                 )
 
         Thread {
