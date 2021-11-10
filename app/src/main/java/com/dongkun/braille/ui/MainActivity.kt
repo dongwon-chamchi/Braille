@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
+import android.view.KeyEvent
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -25,6 +27,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
+    internal var doubleBackToExitPressedOnce = false
+
     val viewModel by viewModel<MainViewModel>()
 
     var mBluetoothAdapter: BluetoothAdapter? = null
@@ -42,6 +46,23 @@ class MainActivity : AppCompatActivity() {
 
         initObserving()
 
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            if (doubleBackToExitPressedOnce) {
+                return super.onKeyDown(keyCode, event)
+                viewModel.setInProgress(false)
+            }
+
+            this.doubleBackToExitPressedOnce = true
+            Toast.makeText(this, "한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()
+
+            Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
+            return true
+        }
+        return false
     }
 
     private val startForResult =
@@ -147,9 +168,8 @@ class MainActivity : AppCompatActivity() {
         viewModel.unregisterReceiver()
     }
 
-    override fun onBackPressed() {
-        //super.onBackPressed()
-        viewModel.setInProgress(false)
-    }
+//    override fun onBackPressed() {
+//        //super.onBackPressed()
+//    }
 
 }
