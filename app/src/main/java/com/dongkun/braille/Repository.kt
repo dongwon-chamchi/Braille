@@ -25,7 +25,7 @@ import java.util.*
 class Repository {
 
     var connected: MutableLiveData<Boolean?> = MutableLiveData(null)
-    var 햣 progressState: MutableLiveData<String> = MutableLiveData("")
+    var progressState: MutableLiveData<String> = MutableLiveData("")
     val putTxt: MutableLiveData<String> = MutableLiveData("")
 
     val inProgress = MutableLiveData<Event<Boolean>>()
