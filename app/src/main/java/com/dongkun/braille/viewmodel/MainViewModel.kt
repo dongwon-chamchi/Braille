@@ -389,5 +389,4 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
         Util.showNotification("send data!")
     }
 
-
 }
