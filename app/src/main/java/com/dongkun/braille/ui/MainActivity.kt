@@ -5,32 +5,40 @@ import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.AssetManager
 import android.os.Bundle
 import android.os.Handler
 import android.view.KeyEvent
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import com.dongkun.braille.R
+import com.dongkun.braille.util.ACTIVITY_REQUEST_CODE
 import com.dongkun.braille.databinding.ActivityMainBinding
 import com.dongkun.braille.util.*
 import com.dongkun.braille.viewmodel.MainViewModel
+import com.googlecode.tesseract.android.TessBaseAPI
+import com.skyfishjy.library.RippleBackground
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.io.*
 
 
-class MainActivity : AppCompatActivity() {
+open class MainActivity : AppCompatActivity() {
+    var context_main // context 변수 선언
+            : Context? = null
+    private var doubleBackToExitPressedOnce = false
+    private var mBtnCameraView: Button? = null
+    private var mEditOcrResult: EditText? = null
 
-    internal var doubleBackToExitPressedOnce = false
+    private val viewModel by viewModel<MainViewModel>()
 
-    val viewModel by viewModel<MainViewModel>()
-
+    private var datapath = ""
+    private var lang = ""
     var mBluetoothAdapter: BluetoothAdapter? = null
     var recv: String = ""
 
@@ -40,6 +48,32 @@ class MainActivity : AppCompatActivity() {
             DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.viewModel = viewModel
 
+        this.context_main = context_main
+
+        val rippleBackground = findViewById<View>(R.id.content) as RippleBackground
+        val imageView = findViewById<View>(R.id.centerImage) as ImageView
+        imageView.setOnClickListener { rippleBackground.startRippleAnimation() }
+
+        // 뷰 선언
+        mBtnCameraView = findViewById<Button>(R.id.btn_camera)
+        mBtnCameraView!!.setOnClickListener(mClickLister);
+        mEditOcrResult = findViewById<EditText>(R.id.txt_send)
+        sTess = TessBaseAPI()
+
+
+        // Tesseract 인식 언어를 한국어로 설정 및 초기화
+        lang = "kor"
+        datapath = "$filesDir/tesseract"
+
+        if (checkFile(File(datapath + "/tessdata"))) {
+            sTess!!.init(datapath, lang)
+        }
+
+
+        // Tesseract 인식 언어를 한국어로 설정 및 초기화
+        lang = "kor"
+        datapath = "$filesDir/tesseract"
+
         if (!hasPermissions(this, PERMISSIONS)) {
             requestPermissions(PERMISSIONS, REQUEST_ALL_PERMISSION)
         }
@@ -47,6 +81,74 @@ class MainActivity : AppCompatActivity() {
         initObserving()
 
     }
+
+    private fun checkFile(dir: File): Boolean {
+        //디렉토리가 없으면 디렉토리를 만들고 그 후에 파일을 카피
+        if (!dir.exists() && dir.mkdirs()) {
+            copyFiles()
+        }
+        //디렉토리가 있지만 파일이 없으면 파일카피 진행
+        if (dir.exists()) {
+            val datafilepath = "$datapath/tessdata/$lang.traineddata"
+            val datafile = File(datafilepath)
+            if (!datafile.exists()) {
+                copyFiles()
+            }
+        }
+        return true
+    }
+
+    private fun copyFiles() {
+        val assetMgr = this.assets
+        var `is`: InputStream? = null
+        var os: OutputStream? = null
+        try {
+            `is` = assetMgr.open("tessdata/$lang.traineddata")
+            val destFile = "$datapath/tessdata/$lang.traineddata"
+            os = FileOutputStream(destFile)
+            val buffer = ByteArray(1024)
+            var read: Int
+            while (`is`.read(buffer).also { read = it } != -1) {
+                os.write(buffer, 0, read)
+            }
+            `is`.close()
+            os.flush()
+            os.close()
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) {
+            if (requestCode == ACTIVITY_REQUEST_CODE) {
+                // 받아온 OCR 결과 출력
+                mEditOcrResult!!.setText(data!!.getStringExtra("STRING_OCR_RESULT"))
+            }
+        }
+    }
+
+    companion object {
+        var sTess: TessBaseAPI? = null
+    }
+
+
+    private val mClickLister: View.OnClickListener = object : View.OnClickListener {
+        override fun onClick(v: View?) {
+
+            // 버튼 클릭 시
+
+            // Camera 화면 띄우기
+            val mIttCamera = Intent(this@MainActivity, CameraView::class.java)
+            startActivityForResult(mIttCamera, ACTIVITY_REQUEST_CODE)
+
+
+        }
+    }
+
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -84,6 +186,7 @@ class MainActivity : AppCompatActivity() {
                 viewModel.inProgressView.set(false)
             }
         })
+
         //Progress text
         viewModel.progressState.observe(this, {
             viewModel.txtProgress.set(it)
