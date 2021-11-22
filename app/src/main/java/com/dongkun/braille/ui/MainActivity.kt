@@ -10,10 +10,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.KeyEvent
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -25,13 +22,15 @@ import com.dongkun.braille.databinding.ActivityMainBinding
 import com.dongkun.braille.util.*
 import com.dongkun.braille.viewmodel.MainViewModel
 import com.googlecode.tesseract.android.TessBaseAPI
+import com.skyfishjy.library.RippleBackground
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.*
 
 
 open class MainActivity : AppCompatActivity() {
-
+    var context_main // context 변수 선언
+            : Context? = null
     private var doubleBackToExitPressedOnce = false
     private var mBtnCameraView: Button? = null
     private var mEditOcrResult: EditText? = null
@@ -43,14 +42,17 @@ open class MainActivity : AppCompatActivity() {
     var mBluetoothAdapter: BluetoothAdapter? = null
     var recv: String = ""
 
-    var sTess: TessBaseAPI? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding: ActivityMainBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.viewModel = viewModel
 
+        this.context_main = context_main
+
+        val rippleBackground = findViewById<View>(R.id.content) as RippleBackground
+        val imageView = findViewById<View>(R.id.centerImage) as ImageView
+        imageView.setOnClickListener { rippleBackground.startRippleAnimation() }
 
         // 뷰 선언
         mBtnCameraView = findViewById<Button>(R.id.btn_camera)
@@ -66,9 +68,6 @@ open class MainActivity : AppCompatActivity() {
         if (checkFile(File(datapath + "/tessdata"))) {
             sTess!!.init(datapath, lang)
         }
-
-
-        // Tesseract 인식 언어를 한국어로 설정 및 초기화
 
 
         // Tesseract 인식 언어를 한국어로 설정 및 초기화
@@ -132,6 +131,11 @@ open class MainActivity : AppCompatActivity() {
         }
     }
 
+    companion object {
+        var sTess: TessBaseAPI? = null
+    }
+
+
     private val mClickLister: View.OnClickListener = object : View.OnClickListener {
         override fun onClick(v: View?) {
 
@@ -182,6 +186,7 @@ open class MainActivity : AppCompatActivity() {
                 viewModel.inProgressView.set(false)
             }
         })
+
         //Progress text
         viewModel.progressState.observe(this, {
             viewModel.txtProgress.set(it)

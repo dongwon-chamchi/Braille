@@ -6,9 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Matrix
 import android.hardware.SensorManager
-import android.os.AsyncTask
-import android.os.Build
-import android.os.Bundle
+import android.os.*
 import android.util.Log
 import android.view.*
 import android.widget.*
@@ -16,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.dongkun.braille.R
+import com.dongkun.braille.ui.MainActivity.Companion.sTess
 import com.dongkun.braille.util.PERMISSIONS
 import com.dongkun.braille.util.PERMISSION_REQUEST_CODE
 import com.dongkun.braille.util.REQUEST_ALL_PERMISSION
@@ -28,7 +27,7 @@ class CameraView : Activity(), CameraBridgeViewBase.CvCameraViewListener2 {
     private var imgInput: Mat? = null
     private val TAG = "opencv"
     private var mOpenCvCameraView: CameraBridgeViewBase? = null
-    private var m_strOcrResult = ""
+    private var mStrOcrResult = ""
 
     private var mBtnOcrStart: Button? = null
     private var mBtnFinish: Button? = null
@@ -259,7 +258,7 @@ class CameraView : Activity(), CameraBridgeViewBase.CvCameraViewListener2 {
             R.id.btn_finish -> {
                 //인식 결과물을 MainActivity에 전달하고 종료
                 val intent = intent
-                intent.putExtra("STRING_OCR_RESULT", m_strOcrResult)
+                intent.putExtra("STRING_OCR_RESULT", mStrOcrResult)
                 setResult(RESULT_OK, intent)
                 mOpenCvCameraView!!.disableView()
                 finish()
@@ -386,23 +385,22 @@ class CameraView : Activity(), CameraBridgeViewBase.CvCameraViewListener2 {
 
     }
 
-    private class AsyncTess : AsyncTask<Bitmap, Int, String>() {
+    private inner class AsyncTess : AsyncTask<Bitmap?, Int?, String>() {
         override fun doInBackground(vararg mRelativeParams: Bitmap?): String? {
             //Tesseract OCR 수행
-            MainActivity().sTess!!.setImage(CameraView().bmpResult)
-            return MainActivity().sTess!!.getUTF8Text()
+            sTess?.setImage(bmpResult)
+            return sTess?.utF8Text
         }
 
         override fun onPostExecute(result: String) {
             //완료 후 버튼 속성 변경 및 결과 출력
-            CameraView().mBtnOcrStart!!.setEnabled(true)
-            CameraView().mBtnOcrStart!!.setText("Retry")
-            CameraView().mBtnOcrStart!!.setTextColor(Color.WHITE)
-            CameraView().mStartFlag = true
-            CameraView().m_strOcrResult = result
-            CameraView().mTextOcrResult!!.text = CameraView().m_strOcrResult
+            mBtnOcrStart!!.isEnabled = true
+            mBtnOcrStart!!.text = "Retry"
+            mBtnOcrStart!!.setTextColor(Color.WHITE)
+            mStartFlag = true
+            mStrOcrResult = result
+            mTextOcrResult!!.text = mStrOcrResult
         }
-
     }
 
 }
