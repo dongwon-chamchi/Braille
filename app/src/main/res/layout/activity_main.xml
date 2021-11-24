@@ -31,7 +31,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_centerInParent="true"
-                android:src="@{viewModel.btnConnected?@drawable/ic_baseline_bluetooth_24_on:@drawable/ic_baseline_bluetooth_24}" />
+                android:src="@{viewModel.btnConnected?@drawable/ic_baseline_bluetooth_24:@drawable/ic_baseline_bluetooth_off_24}" />
 
         </com.skyfishjy.library.RippleBackground>
 
